@@ -14,7 +14,7 @@ type Metrics = {
 
 export default function ReportsPage() {
   const router = useRouter();
-  const [metrics, setMetrics] = useState<Metrics>({
+  const [rows,setRows]=useState<any[]>([]);const [metrics, setMetrics] = useState<Metrics>({
     brothers: 0,
     events: 0,
     service: "0.0",
@@ -54,7 +54,7 @@ export default function ReportsPage() {
         0
       );
 
-      setMetrics({
+      const{data:reportRows}=await supabase.rpc("chapter_report_rows");setRows(reportRows||[]);setMetrics({
         brothers: brothersResult.count ?? 0,
         events: eventsResult.count ?? 0,
         pending: pointsResult.count ?? 0,
@@ -64,6 +64,8 @@ export default function ReportsPage() {
 
     loadReports();
   }, [router]);
+
+  function exportCsv(){const head="Brother,Points,Service Hours,Events Attended";const body=rows.map(x=>`"${String(x.full_name).replaceAll('"','""')}",${x.total_points},${x.service_hours},${x.events_attended}`).join("\n");const blob=new Blob([head+"\n"+body],{type:"text/csv"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="epsilon-zeta-semester-report.csv";a.click();URL.revokeObjectURL(url)}
 
   return (
     <main className="adminPage">
@@ -95,7 +97,7 @@ export default function ReportsPage() {
           <b>{metrics.pending}</b>
           <span>Pending Point Requests</span>
         </div>
-      </div>
+      </div><div className="tableCard"><div className="tableHead">Semester Member Report <button className="primarySmall" onClick={exportCsv}>Export CSV</button></div>{rows.map(x=><div className="reportRow" key={x.full_name}><b>{x.full_name}</b><span>{x.total_points} pts</span><span>{x.service_hours} service hrs</span><span>{x.events_attended} events</span></div>)}</div>
     </main>
   );
 }
