@@ -1,46 +1,32 @@
 # Epsilon Zeta Brothers Portal
 
-Private chapter operations portal for the Epsilon Zeta Chapter of Kappa Alpha Psi at Norfolk State University.
+Private chapter-management portal for the Epsilon Zeta Chapter.
 
-## Stack
-- Next.js 15 + TypeScript
-- Supabase Auth, Postgres, Row Level Security and Storage
-- GitHub Actions CI
-- Vercel-ready
+## V1
+- Authorized-roster account activation with NSU email
+- Brother profiles and private chapter directory
+- Points requests, direct E-Board transactions, corrections and audit history
+- Community-service submissions and verified hours
+- Events with rotating QR attendance
+- E-Board Review Center
+- Private dress-code reporting and evidence storage
+- Academic semester check-ins and E-Board academic dashboard
+- Announcements and in-app notifications
+- Committees and private documents
+- Polemarch-controlled E-Board access and Polemarch transfer
+- Chapter reports with CSV export
+- Active-semester configuration
 
-## Implemented V1
-- Roster-gated NSU account activation
-- Brother profiles and profile photos
-- Role-aware Brother / E-Board / Polemarch permissions
-- Polemarch-only E-Board assignment and password-confirmed Polemarch transfer
-- Configurable semesters and point rules
-- Point submissions, direct E-Board credits/deductions and approval queue
-- Service submissions and approval
-- Events and rotating 45-second QR attendance
-- Attendance review with event points and verified service-hour generation
-- Private dress-code reporting with evidence, -10 deduction and +5 valid-reporter reward
-- Duplicate dress-code protection
-- Private GPA check-ins, semester snapshots and E-Board academic reporting
-- Top-five standings and privacy-safe chapter GPA aggregates
-- Announcements
-- Committees
-- Private chapter documents
-- CSV roster import and activation/deactivation
-- Live reports and dashboard metrics
-- Server-side auth route guard plus database RLS
-
-## Local setup
-1. `npm install`
-2. Create `.env.local`:
-   - `NEXT_PUBLIC_SUPABASE_URL=...`
-   - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=...`
-3. `npm run dev`
-
-The browser client also temporarily accepts `NEXT_PUBLIC_SUPABASE_ANON_KEY` for compatibility with older local configuration.
+## Local development
+1. Copy `.env.example` to `.env.local`.
+2. Add the Supabase project URL and publishable key.
+3. Run `npm install`.
+4. Run `npm run dev`.
 
 ## Validation
-Every push to `main` runs:
-- `npm run typecheck`
-- `npm run build`
+`npm run typecheck` and `npm run build` are executed by GitHub Actions on every push to `main`.
 
-Never commit Supabase secret/service-role keys or `.env.local`.
+## Security model
+Database RLS is the primary authorization boundary. Sensitive administrative RPCs perform server-side role checks. Only authorized roster members can activate accounts. The Polemarch alone controls E-Board administrative assignments. Chapter files and dress-code evidence use private storage buckets.
+
+No service-role key or other server secret belongs in the repository.
