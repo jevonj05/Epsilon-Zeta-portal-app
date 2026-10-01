@@ -1,0 +1,17 @@
+create extension if not exists pgcrypto;
+create type public.member_status as enum ('active','inactive');
+create table public.semesters(id uuid primary key default gen_random_uuid(),name text not null unique,starts_on date not null,ends_on date not null,point_goal integer not null default 100,service_goal numeric(6,2) not null default 20,is_active boolean not null default false,created_at timestamptz not null default now());
+create table public.profiles(id uuid primary key references auth.users(id) on delete cascade,email text not null unique,full_name text not null,classification text,major text,expected_graduation text,initiation_term text,phone text,photo_url text,semester_gpa numeric(3,2) check(semester_gpa between 0 and 4.00),cumulative_gpa numeric(3,2) check(cumulative_gpa between 0 and 4.00),status public.member_status not null default 'active',updated_at timestamptz not null default now());
+create table public.chapter_positions(id uuid primary key default gen_random_uuid(),name text not null unique,grants_admin boolean not null default false,polemarch_only boolean not null default false);
+create table public.member_positions(profile_id uuid references public.profiles(id) on delete cascade,position_id uuid references public.chapter_positions(id) on delete cascade,semester_id uuid references public.semesters(id) on delete cascade,primary key(profile_id,position_id,semester_id));
+create table public.academic_snapshots(id uuid primary key default gen_random_uuid(),profile_id uuid references public.profiles(id) on delete cascade,semester_id uuid references public.semesters(id) on delete cascade,semester_gpa numeric(3,2),cumulative_gpa numeric(3,2),confirmed_at timestamptz not null default now(),unique(profile_id,semester_id));
+insert into public.chapter_positions(name,grants_admin,polemarch_only) values ('Polemarch',true,true),('Vice Polemarch',true,false),('2nd Vice Polemarch',true,false),('Keeper of Records',true,false),('Keeper of Exchequer',true,false) on conflict do nothing;
+alter table public.profiles enable row level security;alter table public.semesters enable row level security;alter table public.chapter_positions enable row level security;alter table public.member_positions enable row level security;alter table public.academic_snapshots enable row level security;
+create policy "authenticated read active profiles" on public.profiles for select to authenticated using(status='active');
+create policy "brother updates own profile" on public.profiles for update to authenticated using(auth.uid()=id) with check(auth.uid()=id);
+create policy "authenticated read semesters" on public.semesters for select to authenticated using(true);
+create policy "authenticated read positions" on public.chapter_positions for select to authenticated using(true);
+create policy "authenticated read member positions" on public.member_positions for select to authenticated using(true);
+create policy "brother reads own academics" on public.academic_snapshots for select to authenticated using(auth.uid()=profile_id);
+create policy "brother inserts own academics" on public.academic_snapshots for insert to authenticated with check(auth.uid()=profile_id);
+create policy "brother updates own academics" on public.academic_snapshots for update to authenticated using(auth.uid()=profile_id) with check(auth.uid()=profile_id);
