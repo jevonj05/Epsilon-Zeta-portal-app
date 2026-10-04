@@ -32,13 +32,13 @@ export default function ReportsPage() {
         return;
       }
 
-      const [brothersResult, eventsResult, pointsResult, serviceResult] =
+      const {data:sem}=await supabase.from("semesters").select("id").eq("is_active",true).single();if(!sem)return;\n      const [brothersResult, eventsResult, pointsResult, serviceResult] =
         await Promise.all([
           supabase
             .from("profiles")
             .select("id", { count: "exact", head: true })
             .eq("status", "active"),
-          supabase.from("events").select("id", { count: "exact", head: true }),
+          supabase.from("events").select("id", { count: "exact", head: true }).eq("semester_id",sem.id),
           supabase
             .from("point_transactions")
             .select("id", { count: "exact", head: true })
