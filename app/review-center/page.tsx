@@ -1,4 +1,4 @@
-import{formatTime}from"@/lib/format";"use client";
+"use client";import{formatTime}from"@/lib/format";
 import{useCallback,useEffect,useState}from"react";import{useRouter}from"next/navigation";import{createClient}from"@/lib/supabase";import{ArrowLeft,Check,ClipboardCheck,X}from"lucide-react";
 type Item={id:string;type:"Point"|"Service"|"Dress Code"|"Attendance";title:string;detail:string;value:string;profileId?:string;evidencePath?:string|null};
 export default function ReviewCenter(){const r=useRouter();const[items,setItems]=useState<Item[]>([]);const[busy,setBusy]=useState("");const[msg,setMsg]=useState("");
