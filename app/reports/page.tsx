@@ -43,11 +43,11 @@ export default function ReportsPage() {
           supabase
             .from("point_transactions")
             .select("id", { count: "exact", head: true })
-            .eq("status", "pending"),
+            .eq("status", "pending").eq("semester_id",sem.id),
           supabase
             .from("service_records")
             .select("hours")
-            .eq("status", "approved"),
+            .eq("status", "approved").eq("semester_id",sem.id),
         ]);
 
       const serviceHours = (serviceResult.data ?? []).reduce(
