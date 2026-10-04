@@ -32,7 +32,8 @@ export default function ReportsPage() {
         return;
       }
 
-      const {data:sem}=await supabase.from("semesters").select("id").eq("is_active",true).single();if(!sem)return;\n      const [brothersResult, eventsResult, pointsResult, serviceResult] =
+      const {data:sem}=await supabase.from("semesters").select("id").eq("is_active",true).single();if(!sem)return;
+      const [brothersResult, eventsResult, pointsResult, serviceResult] =
         await Promise.all([
           supabase
             .from("profiles")
