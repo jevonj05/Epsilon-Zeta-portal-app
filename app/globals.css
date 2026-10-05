@@ -18,3 +18,10 @@
 .sidebarCollapse{margin-left:auto;border:0;background:transparent;color:#cfc7c0;padding:5px;display:grid;place-items:center;border-radius:7px}.sidebarCollapse:hover{background:#ffffff10;color:#fff}.sidebarCollapse svg{width:18px;height:18px;transition:transform .2s ease}
 .sidebar.collapsed{width:76px;padding-left:10px;padding-right:10px}.sidebar.collapsed .brand{padding-left:8px;padding-right:8px}.sidebar.collapsed .brand>div:nth-child(2),.sidebar.collapsed .navItem:not(.active)::after,.sidebar.collapsed .navItem{font-size:0}.sidebar.collapsed .brandMark{width:40px;flex:none}.sidebar.collapsed .sidebarCollapse{position:absolute;left:53px;top:32px;background:#342e2a}.sidebar.collapsed .sidebarCollapse svg{transform:rotate(180deg)}.sidebar.collapsed .navItem{justify-content:center;padding:11px}.sidebar.collapsed .navItem svg{width:20px;height:20px;flex:none}.sidebar.collapsed .navSection{font-size:0;margin:18px 0 7px;border-top:1px solid #ffffff16}.sidebar.collapsed .sideFoot>div:not(.avatar),.sidebar.collapsed .logoutBtn{display:none}.sidebar.collapsed .sideFoot{justify-content:center;padding-left:0;padding-right:0}.main.sidebarCollapsed{margin-left:76px}
 @media(max-width:760px){.sidebar{overflow:hidden}.sidebar nav{overflow-y:auto}.sidebarCollapse{display:none}.sidebar.collapsed{width:min(86vw,300px);padding:24px 16px}.main.sidebarCollapsed{margin-left:0}}
+
+/* Keep the collapse control off the EZ brand; anchor it to the sidebar edge. */
+.sidebarCollapse{display:none!important}
+.sidebarEdgeToggle{position:fixed;z-index:21;left:246px;top:86px;width:28px;height:28px;border:1px solid #ddd5cb;border-radius:50%;background:#fff;color:#5f5650;display:grid;place-items:center;padding:0;box-shadow:0 3px 10px #0002;transition:left .2s ease}
+.sidebarEdgeToggle svg{width:15px;height:15px;transition:transform .2s ease}
+.main.sidebarCollapsed .sidebarEdgeToggle{left:62px}.main.sidebarCollapsed .sidebarEdgeToggle svg{transform:rotate(180deg)}
+@media(max-width:760px){.sidebarEdgeToggle{display:none}}
